@@ -1,0 +1,10 @@
+---
+# tasks file for etcd_cluster
+- name: Create etcd directory
+  file:
+    path: "/etc/etcd"
+    state: "directory"
+    mode: "u=rw,g=rw,o=rw"
+  become: yes
+
+- include: certs.yml

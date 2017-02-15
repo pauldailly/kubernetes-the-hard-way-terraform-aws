@@ -19,3 +19,7 @@
 - hosts: all
   roles:
     - { role: certs, certs_folder: '../terraform/certs/generated/', certs_files: ['ca.pem', 'kubernetes-key.pem', 'kubernetes.pem'] }
+
+- hosts: etcd
+  roles:
+    - etcd_cluster

@@ -1,0 +1,10 @@
+- name: Copy certs to etcd folder
+  copy:
+    remote_src: true
+    src: "{{ item }}"
+    dest: "/etc/etcd"
+  with_items:
+    - "~/kubernetes-key.pem"
+    - "~/kubernetes.pem"
+    - "~/ca.pem"
+  become: yes
