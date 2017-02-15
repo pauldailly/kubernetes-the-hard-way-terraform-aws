@@ -12,6 +12,7 @@ resource "aws_vpc" "kubernetes" {
 
 resource "aws_vpc_dhcp_options" "kubernetes" {
     domain_name = "eu-west-1.compute.internal"
+    domain_name_servers = ["AmazonProvidedDNS"]
 
     tags {
         Name = "kubernetes"

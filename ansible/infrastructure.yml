@@ -1,0 +1,21 @@
+#####################
+# Install Python
+#####################
+
+- hosts: all
+  gather_facts: false # As Python is not yet installed, we cannot gather host facts
+
+  tasks:
+    - name: Install Python
+      raw: "apt-get -y -q install python"
+      become: true
+      retries: 10
+      delay: 20
+
+#######################
+# Setup K8s components
+#######################
+
+- hosts: all
+  roles:
+    - { role: certs, certs_folder: '../terraform/certs/generated/', certs_files: ['ca.pem', 'kubernetes-key.pem', 'kubernetes.pem'] }

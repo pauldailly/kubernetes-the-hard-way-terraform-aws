@@ -43,3 +43,12 @@ resource "aws_security_group_rule" "allow_access_from_this_security_group" {
     security_group_id = "${aws_security_group.kubernetes-securitygroup.id}"
     source_security_group_id = "${aws_security_group.kubernetes-securitygroup.id}"
 }
+
+resource "aws_security_group_rule" "allow_all_outgoing_traffic" {
+    type = "egress"
+    from_port = 0
+    to_port = 65535
+    protocol = "-1"
+    security_group_id = "${aws_security_group.kubernetes-securitygroup.id}"
+    cidr_blocks = ["0.0.0.0/0"]
+}

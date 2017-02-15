@@ -1,0 +1,8 @@
+---
+# tasks file for certs
+
+- name: Copy certs
+  copy:
+    src: "{{ certs_folder }}/{{ item }}"
+    dest: "~/"
+  with_items: "{{ certs_files }}"

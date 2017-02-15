@@ -20,3 +20,8 @@ variable "PATH_TO_PUBLIC_KEY" {
 variable "INSTANCE_USERNAME" {
   default = "ubuntu"
 }
+
+variable ansibleFilter {
+  description = "`ansibleFilter` tag value added to all instances, to enable instance filtering in Ansible dynamic inventory"
+  default = "KubernetesThw" # IF YOU CHANGE THIS YOU HAVE TO CHANGE instance_filters = tag:ansibleFilter=Kubernetes01 in ./ansible/hosts/ec2.ini
+}
