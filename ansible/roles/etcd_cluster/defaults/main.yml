@@ -1,2 +1,10 @@
 ---
 # defaults file for etcd_cluster
+kubernetes_key_file: kubernetes-key.pem
+kubernetes_cert_file: kubernetes.pem
+trusted_ca_file: ca.pem
+
+etcd_release_version: 3.1.1
+etcd_release_url: "https://github.com/coreos/etcd/releases/download"
+etcd_binary_name: etcd-v{{ etcd_release_version }}-linux-amd64
+etcd_binary_location: "{{ etcd_release_url }}/v{{ etcd_release_version }}/{{ etcd_binary_name }}.tar.gz"

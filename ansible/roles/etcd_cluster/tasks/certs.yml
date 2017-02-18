@@ -4,7 +4,7 @@
     src: "{{ item }}"
     dest: "/etc/etcd"
   with_items:
-    - "~/kubernetes-key.pem"
-    - "~/kubernetes.pem"
-    - "~/ca.pem"
+    - "~/{{ kubernetes_key_file }}"
+    - "~/{{ kubernetes_cert_file }}"
+    - "~/{{ trusted_ca_file }}"
   become: yes

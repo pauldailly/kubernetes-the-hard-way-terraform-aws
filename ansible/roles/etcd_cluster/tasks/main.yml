@@ -7,4 +7,60 @@
     mode: "u=rw,g=rw,o=rw"
   become: yes
 
+
+- name: Download etcd release binaries v{{ etcd_release_version }} from {{ etcd_release_url }}
+  unarchive:
+    copy: no
+    src: "{{ etcd_binary_location }}"
+    dest: "~"
+  become: yes
+
+- name: Copy etcd binaries
+  copy:
+    remote_src: true
+    src: "~/{{ etcd_binary_name }}/{{ item }}"
+    dest: "/usr/bin"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+  become: yes
+
+- name: Create etcd data directory /var/lib/etcd
+  file:
+    path: /var/lib/etcd
+    state: directory
+    recurse: yes
+  become: yes
+
 - include: certs.yml
+
+- name: Add etcd systemd unit
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+    mode: 700
+  become: yes
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  become: true
+
+- name: Start etcd service
+  command: systemctl start etcd
+  become: yes
+
+- name: Wait for etcd service to start on port 2379
+  wait_for:
+    port: 2379
+    timeout: 60
+
+- name: Verify etcd cluster health
+  shell: etcdctl --ca-file=/etc/etcd/{{ trusted_ca_file }} cluster-health
+  register: cmd_result
+  until: cmd_result.stdout.find("cluster is healthy") != -1
+  retries: 5
+  delay: 5
+  become: yes

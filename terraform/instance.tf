@@ -24,7 +24,7 @@ resource "aws_instance" "kubernetes_controllers" {
   tags {
       Name = "controller-${count.index}"
       Role = "controller"
-      AnsibleFilter = "${var.ansibleFilter}"
+      AnsibleFilter = "${var.ANSIBLE_FILTER}"
       AnsibleNodeName = "controller${count.index}"
   }
 }
@@ -54,7 +54,7 @@ resource "aws_instance" "kubernetes_workers" {
   tags {
       Name = "worker-${count.index}"
       Role = "worker"
-      AnsibleFilter = "${var.ansibleFilter}"
+      AnsibleFilter = "${var.ANSIBLE_FILTER}"
       AnsibleNodeName = "worker${count.index}"
   }
 }
@@ -84,7 +84,7 @@ resource "aws_instance" "etcd_cluster_members" {
   tags {
       Name = "etcd-${count.index}"
       Role = "etcd"
-      AnsibleFilter = "${var.ansibleFilter}"
+      AnsibleFilter = "${var.ANSIBLE_FILTER}"
       AnsibleNodeName = "etcd${count.index}"
   }
 }

@@ -21,7 +21,11 @@ variable "INSTANCE_USERNAME" {
   default = "ubuntu"
 }
 
-variable ansibleFilter {
+variable "ANSIBLE_FILTER" {
   description = "`ansibleFilter` tag value added to all instances, to enable instance filtering in Ansible dynamic inventory"
   default = "KubernetesThw" # IF YOU CHANGE THIS YOU HAVE TO CHANGE instance_filters = tag:ansibleFilter=Kubernetes01 in ./ansible/hosts/ec2.ini
+}
+
+variable "AWS_PROFILE" {
+  default = "terraform"
 }

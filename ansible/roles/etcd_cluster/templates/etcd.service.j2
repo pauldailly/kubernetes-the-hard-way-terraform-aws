@@ -1,0 +1,25 @@
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos
+
+[Service]
+ExecStart=/usr/bin/etcd --name {{ inventory_hostname }} \
+  --cert-file=/etc/etcd/{{ kubernetes_cert_file }} \
+  --key-file=/etc/etcd/{{ kubernetes_key_file }} \
+  --peer-cert-file=/etc/etcd/{{ kubernetes_cert_file }} \
+  --peer-key-file=/etc/etcd/{{ kubernetes_key_file }} \
+  --trusted-ca-file=/etc/etcd/{{ trusted_ca_file }} \
+  --peer-trusted-ca-file=/etc/etcd/{{ trusted_ca_file }} \
+  --initial-advertise-peer-urls https://{{ ansible_eth0.ipv4.address }}:2380 \
+  --listen-peer-urls https://{{ ansible_eth0.ipv4.address }}:2380 \
+  --listen-client-urls https://{{ ansible_eth0.ipv4.address }}:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ ansible_eth0.ipv4.address }}:2379 \
+  --initial-cluster-token etcd-cluster-0 \
+  --initial-cluster {% for host in groups['etcd'] %}{{ host }}=https://{{ hostvars[host].ansible_eth0.ipv4.address }}:2380{% if not loop.last %},{% endif %}{% endfor %} \
+  --initial-cluster-state new \
+  --data-dir=/var/lib/etcd
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
