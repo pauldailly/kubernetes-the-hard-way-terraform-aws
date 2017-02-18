@@ -1,0 +1,22 @@
+---
+# tasks file for kubernetes_controllers
+- name: Create kubernetes data directory /var/lib/kubernetes
+  file:
+    path: /var/lib/kubernetes
+    state: directory
+    recurse: yes
+  become: yes
+
+- include: certs.yml
+
+- name: Download v{{ kubernetes_version }} of {{ item }} from {{ kubernetes_base_url }}
+  get_url:
+    url: "{{ kubernetes_base_url }}/{{ item }}"
+    dest: "/usr/bin/"
+    mode: 0755
+  with_items:
+    - "{{ kube_api_server_binary }}"
+    - "{{ kube_controller_manager_binary }}"
+    - "{{ kube_scheduler_binary }}"
+    - "{{ kubectl_binary }}"
+  become: yes

@@ -1,0 +1,3 @@
+- hosts: controllers
+  roles:
+    - kubernetes_controllers

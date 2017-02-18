@@ -1,8 +1,8 @@
 [etcd:children]
 tag_Role_etcd
 
-[worker:children]
+[workers:children]
 tag_Role_worker
 
-[controller:children]
+[controllers:children]
 tag_Role_controller

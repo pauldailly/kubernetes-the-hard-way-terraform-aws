@@ -1,0 +1,12 @@
+---
+# defaults file for kubernetes_controllers
+kubernetes_key_file: kubernetes-key.pem
+kubernetes_cert_file: kubernetes.pem
+trusted_ca_file: ca.pem
+
+kubernetes_version: 1.4.0
+kubernetes_base_url: "https://storage.googleapis.com/kubernetes-release/release/v{{ kubernetes_version }}/bin/linux/amd64"
+kube_api_server_binary: kube-apiserver
+kube_controller_manager_binary: kube-controller-manager
+kube_scheduler_binary: kube-scheduler
+kubectl_binary: kubectl

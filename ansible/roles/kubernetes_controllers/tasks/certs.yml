@@ -1,0 +1,10 @@
+- name: Copy certs to etcd folder
+  copy:
+    remote_src: true
+    src: "{{ item }}"
+    dest: /var/lib/kubernetes
+  with_items:
+    - "~/{{ kubernetes_key_file }}"
+    - "~/{{ kubernetes_cert_file }}"
+    - "~/{{ trusted_ca_file }}"
+  become: yes
