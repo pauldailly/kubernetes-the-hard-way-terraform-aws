@@ -1,0 +1,4 @@
+---
+# defaults file for kubernetes_workers
+docker_version: 1.13.1
+docker_binary_url: "https://get.docker.com/builds/Linux/x86_64/docker-{{ docker_version }}.tgz"

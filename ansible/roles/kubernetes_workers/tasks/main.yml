@@ -1,0 +1,61 @@
+---
+# tasks file for kubernetes_workers
+- name: Download Docker from {{ docker_binary_url }}
+  get_url:
+    url: "{{ docker_binary_url }}"
+    dest: "~"
+    mode: 0755
+  become: yes
+
+- name: Extract Docker binaries
+  unarchive:
+    src: ~/docker-{{ docker_version }}.tgz
+    dest: "~"
+    copy: no
+  become: yes
+
+- name: Copy Docker binaries to /usr/bin
+  copy:
+    src: "~/docker/{{ item }}"
+    dest: /usr/bin
+    remote_src: True
+    mode: 0755
+  become: yes
+  with_items:
+    - docker-containerd
+    - docker-containerd-shim
+    - docker-init
+    - docker-runc
+    - docker-containerd-ctr
+    - dockerd
+    - docker-proxy
+    - docker
+
+- name: Copy Docker systemd service
+  copy:
+    src: "docker.service"
+    dest: /etc/systemd/system/
+  become: yes
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  become: yes
+
+- name: Enable Docker systemd service
+  command: systemctl enable docker
+  become: yes
+
+- name: Start Docker systemd service
+  command: systemctl start docker
+  become: yes
+
+- name: Verify Docker install
+  shell: docker version
+  register: cmd_result
+  retries: 5
+  delay: 10
+  become: yes
+
+- assert:
+    that:
+      - "'{{ docker_version }}' in cmd_result.stdout"
