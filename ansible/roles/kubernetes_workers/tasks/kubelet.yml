@@ -1,0 +1,51 @@
+- name: Ensure Container Networking Interface plugins directory /opt/cni exists
+  file:
+    path: "/opt/cni"
+    state: directory
+    recurse: yes
+  become: yes
+
+- name: Download CNI plugins
+  unarchive:
+    src: "{{ cni_plugin_location }}"
+    dest: "/opt/cni"
+    copy: no
+  become: yes
+
+- name: Download Kubernetes worker binaries
+  get_url:
+    url: "{{ docker_binary_url }}"
+    dest: "/usr/bin"
+    mode: 0755
+  become: yes
+  with_items:
+    - "{{ kubectl_server_binary }}"
+    - "{{ kube_proxy_binary }}"
+    - "{{ kubelet_binary }}"
+
+- name: Copy Kubernetes worker systemd services
+  template:
+    src: "{{ item }}.service.j2"
+    dest: /etc/systemd/system/{{ item }}.service
+  become: yes
+  with_items:
+    - "kube-proxy"
+    - "kubelet"
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  become: yes
+
+- name: Enable Kubernetes worker systemd services
+  command: systemctl enable {{ item }}
+  become: yes
+  with_items:
+    - "kube-proxy"
+    - "kubelet"
+
+- name: Start Kubernetes worker systemd services
+  command: systemctl start {{ item }}
+  become: yes
+  with_items:
+    - "kube-proxy"
+    - "kubelet"

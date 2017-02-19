@@ -2,3 +2,10 @@
 # defaults file for kubernetes_workers
 docker_version: 1.13.1
 docker_binary_url: "https://get.docker.com/builds/Linux/x86_64/docker-{{ docker_version }}.tgz"
+
+kubernetes_version: 1.4.0
+kubernetes_base_url: "https://storage.googleapis.com/kubernetes-release"
+cni_plugin_location: "{{ kubernetes_base_url }}/network-plugins/cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz"
+kubectl_server_binary: "{{ kubernetes_base_url }}/release/kubectl"
+kube_proxy_binary: "{{ kubernetes_base_url }}/release/kube-proxy"
+kubelet_binary: "{{ kubernetes_base_url }}/release/kubelet"
