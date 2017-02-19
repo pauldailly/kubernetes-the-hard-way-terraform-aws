@@ -7,8 +7,6 @@
     recurse: yes
   become: yes
 
-- include: certs.yml
-
 - name: Download v{{ kubernetes_version }} of {{ item }} from {{ kubernetes_base_url }}
   get_url:
     url: "{{ kubernetes_base_url }}/{{ item }}"
@@ -20,3 +18,66 @@
     - "{{ kube_scheduler_binary }}"
     - "{{ kubectl_binary }}"
   become: yes
+
+- name: Copy the auth token file to Kubernetes data directory
+  template:
+    src: token.csv.j2
+    dest: /var/lib/kubernetes/token.csv
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+
+- name: Copy authorization policy to Kubernetes data directory
+  copy:
+    src: authorization-policy.jsonl
+    dest: /var/lib/kubernetes
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+
+- name: Add Kubernetes controller manager service file
+  template:
+    src: "{{ item }}.service.j2"
+    dest: /etc/systemd/system/{{ item }}.service
+    mode: 700
+  become: yes
+  with_items:
+    - "kube-apiserver"
+    - "kube-controller-manager"
+    - "kube-scheduler"
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  become: true
+
+- name: Enable Kubernetes systemd services
+  command: systemctl enable {{ item }}
+  become: true
+  with_items:
+    - "kube-apiserver"
+    - "kube-controller-manager"
+    - "kube-scheduler"
+
+- name: Start Kubernetes systemd services
+  command: systemctl start {{ item }}
+  become: true
+  with_items:
+    - "kube-apiserver"
+    - "kube-controller-manager"
+    - "kube-scheduler"
+
+- name: Verify Kubernetes status
+  shell: kubectl get componentstatuses
+  register: cmd_result
+  retries: 5
+  delay: 10
+
+- assert:
+    that:
+      - "'scheduler            Healthy' in cmd_result.stdout"
+      - "'controller-manager   Healthy' in cmd_result.stdout"
+      - "'etcd-0               Healthy' in cmd_result.stdout"
+      - "'etcd-1               Healthy' in cmd_result.stdout"
+      - "'etcd-2               Healthy' in cmd_result.stdout"

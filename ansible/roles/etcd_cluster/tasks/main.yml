@@ -35,8 +35,6 @@
     recurse: yes
   become: yes
 
-- include: certs.yml
-
 - name: Add etcd systemd unit
   template:
     src: etcd.service.j2

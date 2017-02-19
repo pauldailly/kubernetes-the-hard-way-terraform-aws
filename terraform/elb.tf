@@ -9,6 +9,7 @@ resource "aws_elb" "kubernetes-elb" {
     lb_protocol = "tcp"
   }
 
+  instances = ["${aws_instance.kubernetes_controllers.*.id}"]
   tags {
     Name = "kubernetes"
   }

@@ -1,9 +1,19 @@
 ---
 # tasks file for certs
+- name: Ensure target cert directory {{ certs_target_folder }} exists
+  file:
+    path: "{{ certs_target_folder }}"
+    state: directory
+    recurse: yes
+  become: yes
 
-- name: Copy certs
+- name: Copy certs to {{ certs_target_folder }}
   copy:
     src: "{{ certs_folder }}/{{ item }}"
-    dest: "~/"
-  with_items: "{{ certs_files }}"
+    dest: "{{ certs_target_folder }}/"
+    mode: 0644
+  with_items:
+    - "{{ kubernetes_key_file }}"
+    - "{{ kubernetes_cert_file }}"
+    - "{{ trusted_ca_file }}"
   become: yes

@@ -1,2 +1,7 @@
 ---
 # defaults file for certs
+kubernetes_key_file: kubernetes-key.pem
+kubernetes_cert_file: kubernetes.pem
+trusted_ca_file: ca.pem
+
+certs_folder: '../../../../terraform/certs/generated'
