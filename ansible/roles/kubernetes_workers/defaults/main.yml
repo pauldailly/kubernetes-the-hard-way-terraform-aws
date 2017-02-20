@@ -6,6 +6,10 @@ docker_binary_url: "https://get.docker.com/builds/Linux/x86_64/docker-{{ docker_
 kubernetes_version: 1.4.0
 kubernetes_base_url: "https://storage.googleapis.com/kubernetes-release"
 cni_plugin_location: "{{ kubernetes_base_url }}/network-plugins/cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz"
-kubectl_server_binary: "{{ kubernetes_base_url }}/release/kubectl"
-kube_proxy_binary: "{{ kubernetes_base_url }}/release/kube-proxy"
-kubelet_binary: "{{ kubernetes_base_url }}/release/kubelet"
+kubernetes_binaries_base_url: "{{ kubernetes_base_url }}/release/v1.4.0/bin/linux/amd64"
+kubectl_server_binary: "kubectl"
+kube_proxy_binary: "kube-proxy"
+kubelet_binary: "kubelet"
+
+kube_config_dir: "/var/lib/kubelet"
+cni_dir: "/opt/cni"

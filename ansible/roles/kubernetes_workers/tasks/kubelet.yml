@@ -1,6 +1,13 @@
-- name: Ensure Container Networking Interface plugins directory /opt/cni exists
+- name: Ensure Container Networking Interface plugins directory {{ cni_dir }} exists
   file:
-    path: "/opt/cni"
+    path: "{{ cni_dir }}"
+    state: directory
+    recurse: yes
+  become: yes
+
+- name: Ensure Kube config directory {{ kube_config_dir }} exists
+  file:
+    path: "{{ kube_config_dir }}"
     state: directory
     recurse: yes
   become: yes
@@ -8,20 +15,26 @@
 - name: Download CNI plugins
   unarchive:
     src: "{{ cni_plugin_location }}"
-    dest: "/opt/cni"
+    dest: "{{ cni_dir }}"
     copy: no
   become: yes
 
 - name: Download Kubernetes worker binaries
   get_url:
-    url: "{{ docker_binary_url }}"
-    dest: "/usr/bin"
+    url: "{{ kubernetes_binaries_base_url }}/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
     mode: 0755
   become: yes
   with_items:
     - "{{ kubectl_server_binary }}"
     - "{{ kube_proxy_binary }}"
     - "{{ kubelet_binary }}"
+
+- name: Copy Kube config
+  template:
+    src: "kubeconfig.j2"
+    dest: "{{ kube_config_dir }}/kubeconfig"
+  become: yes
 
 - name: Copy Kubernetes worker systemd services
   template:
