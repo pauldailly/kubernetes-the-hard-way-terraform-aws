@@ -1,0 +1,42 @@
+- hosts: localhost
+  gather_facts: false # As Python is not yet installed, we cannot gather host facts
+
+  tasks:
+    - name: Fetch Kubernetes AWS route table ID
+      ec2_vpc_route_table_facts:
+        filters:
+          "tag:Name": "kubernetes-public-1"
+        region: "{{ ec2_region }}"
+      register: aws_route_table_facts
+
+    - name: Set route table id
+      set_fact:
+        route_table_id: "{{ aws_route_table_facts.route_tables.0.id }}"
+      changed_when: false
+
+    - name: Set route table vpc id
+      set_fact:
+        route_table_vpc_id: "{{ aws_route_table_facts.route_tables.0.vpc_id }}"
+      changed_when: false
+
+    - name: Gather ec2 facts
+      ec2_remote_facts:
+        region: "{{ ec2_region }}"
+        filters:
+          "tag:Role": "worker"
+      register: ec2_host_facts
+
+    - set_fact:
+        instance_ids: "{{ ec2_host_facts.instances | map(attribute='id') | list }}"
+
+    - debug:
+        msg: "{{ route_table_id }}"
+
+    - name: Update route table
+      ec2_vpc_route_table:
+        vpc_id: "{{ route_table_vpc_id }}"
+        route_table_id: "{{ route_table_id }}"
+        region: "{{ ec2_region }}"
+        routes:
+          - dest: "10.200.0.0/24"
+            instance_id: "{{ instance_ids.0 }}"

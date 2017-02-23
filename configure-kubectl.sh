@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ $# -eq 0 ]
+  then
+    echo "You must specify URL of load balancer for Kubernetes cluster"
+    exit 1
+fi
+
 kubectl config set-cluster kubernetes-the-hard-way \
   --certificate-authority=terraform/certs/generated/ca.pem \
   --embed-certs=true \
