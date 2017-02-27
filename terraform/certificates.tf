@@ -35,7 +35,7 @@ resource "null_resource" "certificates" {
   }
 
   provisioner "local-exec" {
-    command = "echo '${ data.template_file.certificates.rendered }' > certs/generated/kubernetes-csr.json"
+    command = "mkdir -p certs/generated && echo '${ data.template_file.certificates.rendered }' > certs/generated/kubernetes-csr.json"
   }
   provisioner "local-exec" {
     command = "cd certs/generated; cfssl gencert -initca ../config/ca-csr.json | cfssljson -bare ca; cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=../config/ca-config.json -profile=kubernetes kubernetes-csr.json | cfssljson -bare kubernetes"

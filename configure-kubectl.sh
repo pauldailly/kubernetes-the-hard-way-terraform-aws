@@ -6,18 +6,18 @@ if [ $# -eq 0 ]
     exit 1
 fi
 
-kubectl config set-cluster kubernetes-the-hard-way \
+kubectl config set-cluster 'kubernetes-the-hard-way' \
   --certificate-authority=terraform/certs/generated/ca.pem \
   --embed-certs=true \
   --server=$1:6443
 
 kubectl config set-credentials admin --token chAng3m3
 
-kubectl config use-context default-context
-  --cluster=kubernetes-the-hard-way \
-  --user=admin
+kubectl config set-context kthw --cluster='kubernetes-the-hard-way' --user=admin
 
-kubectl config set-context default-context
+kubectl config use-context kthw --cluster='kubernetes-the-hard-way' --user=admin
+
+kubectl config set-context kthw
 
 printf '\n\n'
 printf '**************************\n'
