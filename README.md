@@ -14,7 +14,7 @@ ssh-keygen -t rsa -b 4096 -C "kubernetes-the-hard-way" -f kubernetes_ec2_key
 ```
 3. Ensure that the AWS credentials profile that you wish to use to run this project is specified correctly in the ```AWS_PROFILE``` variable in the [Terraform variables file](terraform/vars.tf).
 4. Install [Terraform](https://www.terraform.io/intro/getting-started/install.html).
-5. Install (go)[https://golang.org/doc/install].
+5. Install [go](https://golang.org/doc/install).
 6. Install the following [cfssl](https://github.com/cloudflare/cfssl) tools:
 
 ```bash
@@ -40,7 +40,7 @@ terraform apply
 pip install ansible
 ```
 
-9. Install (boto)[https://boto3.readthedocs.io/en/latest/]
+9. Install [boto](https://boto3.readthedocs.io/en/latest/)
 ```bash
 pip install boto
 ```
@@ -53,5 +53,7 @@ pip install boto
 11. Install [kubectl](https://kubernetes.io/docs/user-guide/prereqs/)
 11. From project root run:
 ```bash
-./configure-kubectl.sh  <URL OF LOADBALANCER>
+./configure-kubectl.sh  <URL OF LOAD BALANCER>
 ```
+
+where *<URL OF LOAD BALANCER>* should be the URL of the load balancer created as part of the cluster setup.
