@@ -1,0 +1,50 @@
+---
+# tasks file for flannel
+- name: Ensure /opt/flannel directory exists
+  file:
+    name: /opt/flannel
+    state: directory
+  become: yes
+
+- name: Download v{{ flannel_version }} of Flannel
+  unarchive:
+    src: "{{ flannel_binary_url }}"
+    dest: "/opt/flannel"
+    remote_src: True
+  become: yes
+
+- name: Move flanneld to /usr/bin
+  copy:
+    src: /opt/flannel/flanneld
+    dest: /usr/bin
+    remote_src: True
+    mode: 0544
+  become: yes
+
+- name: Copy Flannel service config
+  template:
+    src: flanneld.j2
+    dest: /etc/default/flanneld
+    owner: root
+    group: root
+    mode: 0444
+  become: yes
+
+- name: Add Flannel service file
+  template:
+    src: "flanneld.service.j2"
+    dest: /etc/systemd/system/flanneld.service
+    mode: 700
+  become: yes
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  become: true
+
+- name: Enable Flannel systemd service
+  command: systemctl enable flanneld
+  become: true
+
+- name: Start Flannel systemd services
+  command: systemctl start flanneld
+  become: true

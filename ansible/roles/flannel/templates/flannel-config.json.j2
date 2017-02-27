@@ -1,0 +1,10 @@
+{
+    "Network": "{{ cluster_cidr }}",
+    "SubnetLen": 24,
+    "SubnetMin": "{{ subnet_min }}",
+    "SubnetMax": "{{ subnet_max }}",
+    "Backend": {
+        "Type": "vxlan",
+        "VNI": 1
+    }
+}

@@ -1,0 +1,16 @@
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile={{ flanneld_config_path }}/flanneld
+ExecStart=/usr/bin/flanneld -etcd-endpoints=${FLANNEL_ETCD} -etcd-prefix=${FLANNEL_ETCD_KEY} $FLANNEL_OPTIONS
+Restart=on-failure
+DefaultTimeoutStartSec=180
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=docker.service
