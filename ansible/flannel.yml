@@ -1,6 +1,6 @@
-- hosts: all
-  gather_facts: True
-  tasks: []
+- hosts: etcd[0]
+  roles:
+    - flannel_config
 
 - hosts: workers:controllers
   roles:

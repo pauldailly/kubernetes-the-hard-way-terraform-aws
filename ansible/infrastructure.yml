@@ -12,6 +12,9 @@
       retries: 10
       delay: 20
 
+- hosts: all
+  gather_facts: True
+
 #######################
 # Setup K8s components
 #######################

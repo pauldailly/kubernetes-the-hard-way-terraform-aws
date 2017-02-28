@@ -1,0 +1,14 @@
+---
+# tasks file for flannel_config
+# copy template to host
+# Push template into etcd using certs etc
+
+- name: Copy Flannel network config to etcd host
+  template:
+    src: flannel-config.json.j2
+    dest: "~/flannel-config.json"
+  become: yes
+
+- name: Add Flannel network config to etcd cluster
+  shell: etcdctl --ca-file {{ ca_cert_file }} --cert-file {{ cert_file }} --key-file {{ key_file }} set kubernetes-cluster/network/config < flannel-config.json
+  become: yes

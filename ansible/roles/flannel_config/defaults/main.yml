@@ -1,0 +1,9 @@
+---
+# defaults file for flannel_config
+cluster_cidr: "10.200.0.0/16"
+subnet_min: "10.200.50.0"
+subnet_max: "10.200.199.0"
+
+ca_cert_file: /etc/etcd/ca.pem
+cert_file: /etc/etcd/kubernetes.pem
+key_file: /etc/etcd/kubernetes-key.pem
