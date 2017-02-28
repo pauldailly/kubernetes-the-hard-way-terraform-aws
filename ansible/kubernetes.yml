@@ -5,3 +5,7 @@
 - hosts: workers
   roles:
     - kubernetes_workers
+
+- hosts: controllers[0]
+  roles:
+    - kube_dns

@@ -1,0 +1,13 @@
+---
+# tasks file for kube_dns
+
+- name: Copy kubedns files to host
+  copy:
+    src: files/
+    dest: "~/"
+
+- name: Create the kubedns service
+  command: kubectl create -f kubedns_service.yml
+
+- name: Create the kubedns deployment
+  command: kubectl create -f kubedns_deployment.yml
