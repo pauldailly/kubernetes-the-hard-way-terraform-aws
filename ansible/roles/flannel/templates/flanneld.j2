@@ -1,9 +1,7 @@
+FLANNELD_IFACE="{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 FLANNEL_ETCD_KEY="/kubernetes-cluster/network"
-
 FLANNEL_ETCD="{% for host in groups['etcd'] %}https://{{ hostvars[host].ansible_eth0.ipv4.address }}:2379{% if not loop.last %},{% endif %}{% endfor %}"
-
 FLANNELD_ETCD_ENDPOINTS="{% for host in groups['etcd'] %}https://{{ hostvars[host].ansible_eth0.ipv4.address }}:2379{% if not loop.last %},{% endif %}{% endfor %}"
-
 FLANNELD_ETCD_CAFILE=/var/lib/kubernetes/ca.pem
 FLANNELD_ETCD_CERTFILE=/var/lib/kubernetes/kubernetes.pem
 FLANNELD_ETCD_KEYFILE=/var/lib/kubernetes/kubernetes-key.pem

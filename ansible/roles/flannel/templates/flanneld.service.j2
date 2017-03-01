@@ -7,9 +7,9 @@ Wants=network-online.target
 [Service]
 Type=notify
 EnvironmentFile={{ flanneld_config_path }}/flanneld
-ExecStart=/usr/bin/flanneld -etcd-endpoints=${FLANNEL_ETCD} -etcd-prefix=${FLANNEL_ETCD_KEY} $FLANNEL_OPTIONS
+ExecStart=/usr/bin/flanneld -etcd-endpoints=${FLANNEL_ETCD} -etcd-prefix=${FLANNEL_ETCD_KEY} -iface=${FLANNELD_IFACE} --etcd-keyfile=${FLANNELD_ETCD_KEYFILE} --etcd-certfile=${FLANNELD_ETCD_CERTFILE} --etcd-cafile=${FLANNELD_ETCD_CAFILE}
 Restart=on-failure
-DefaultTimeoutStartSec=180
+TimeoutStartSec=180
 
 [Install]
 WantedBy=multi-user.target

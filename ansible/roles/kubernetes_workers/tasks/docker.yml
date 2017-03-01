@@ -1,5 +1,11 @@
 ---
 # tasks file for kubernetes_workers
+- name: Download bridge utils
+  apt:
+    name: bridge-utils
+    state: present
+  become: yes
+
 - name: Download Docker from {{ docker_binary_url }}
   get_url:
     url: "{{ docker_binary_url }}"

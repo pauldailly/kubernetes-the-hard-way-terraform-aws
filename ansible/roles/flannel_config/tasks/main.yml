@@ -10,5 +10,5 @@
   become: yes
 
 - name: Add Flannel network config to etcd cluster
-  shell: etcdctl --ca-file {{ ca_cert_file }} --cert-file {{ cert_file }} --key-file {{ key_file }} set kubernetes-cluster/network/config < flannel-config.json
+  shell: etcdctl --ca-file {{ ca_cert_file }} --cert-file {{ cert_file }} --key-file {{ key_file }} set kubernetes-cluster/network/config < ~/flannel-config.json
   become: yes
